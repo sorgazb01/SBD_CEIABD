@@ -1,0 +1,13 @@
+Bloque 5 – Análisis temático y síntesis (5 %)
+
+16_.Género terror/horror. Busca todas las producciones de género terror o horror y analiza cuál es la más reciente y de qué país procede.
+(2 %)
+
+17_.Colaboraciones internacionales. Calcula cuántas producciones fueron realizadas en más de un país.
+(1 %)
+
+18_.Director más frecuente. Indica qué director aparece con mayor frecuencia en el conjunto de datos.
+(1 %)
+
+19_.Géneros predominantes. Analiza cuáles son los géneros más comunes y en qué tipo de producción predominan.
+(1 %)

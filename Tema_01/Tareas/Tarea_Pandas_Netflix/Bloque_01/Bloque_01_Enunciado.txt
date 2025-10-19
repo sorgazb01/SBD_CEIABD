@@ -1,0 +1,13 @@
+Bloque 1 – Exploración inicial del dataset (10 %)
+
+1_.Carga y exploración básica. Explica qué información contiene el dataset, cuántas filas y columnas tiene, y qué representa cada una.
+(3 %)
+
+2_.Tipos de producciones. Calcula cuántos títulos hay de cada tipo (por ejemplo, películas o series) e interpreta el resultado.
+(3 %)
+
+3_.Producciones recientes. Muestra las diez producciones más recientes junto con su país y año de estreno.
+(2 %)
+
+4_.Producción más antigua. Indica cuál es la producción más antigua registrada y comenta si el dato parece coherente.
+(2 %)

@@ -1,0 +1,14 @@
+Bloque 4 – Visualización y análisis avanzado (8 %)
+
+12_.Evolución de estrenos. Representa mediante un gráfico la evolución del número de títulos a lo largo de los años.
+(3 %)
+
+13_.Producción por país. Crea un gráfico de barras con los diez países que más títulos han producido.
+(2 %)
+
+14_.Décadas. Añade una nueva columna llamada “década” que agrupe los años de estreno (por ejemplo, 1990, 2000, 2010...)
+y analiza qué década concentra más estrenos.
+(2 %)
+
+15_.Películas y series por año. Crea una visualización que compare el número de películas y series por año.
+(1 %)

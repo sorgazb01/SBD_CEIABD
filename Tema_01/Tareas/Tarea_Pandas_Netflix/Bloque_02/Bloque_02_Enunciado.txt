@@ -1,0 +1,13 @@
+Bloque 2 – Filtrado y selección de información (8 %)
+
+5_.Filtro por año. Muestra las producciones estrenadas en el año 2020 y cuenta cuántas hay.
+(2 %)
+
+6_.Filtro por director. Muestra todas las producciones dirigidas por Steven Spielberg (si aparece en el dataset).
+(2 %)
+
+7_.Filtro por palabra clave. Crea un nuevo DataFrame con los títulos que contengan la palabra Love o Amor.
+(2 %)
+
+8_.Filtro por país. Calcula qué porcentaje del total del catálogo corresponde a producciones de Estados Unidos.
+(2 %)

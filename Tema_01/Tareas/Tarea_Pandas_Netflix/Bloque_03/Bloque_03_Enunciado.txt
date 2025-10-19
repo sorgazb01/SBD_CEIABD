@@ -1,0 +1,10 @@
+Bloque 3 – Análisis descriptivo y agrupaciones (9 %)
+
+9_.Duraciones más largas. Muestra las cinco producciones con mayor duración e interpreta el resultado.
+(3 %)
+
+10_.Producción por país. Identifica los cinco países con más títulos producidos y ordénalos de mayor a menor.
+(3 %)
+
+11_.Producción por año. Indica qué año tiene más estrenos y cuántos títulos se publicaron en ese periodo.
+(3 %)
