@@ -1,24 +1,56 @@
+import ast
 import pandas as pd
+import matplotlib.pyplot as plt
 
 url = "https://raw.githubusercontent.com/amirtds/kaggle-netflix-tv-shows-and-movies/refs/heads/main/titles.csv"
 netflix = pd.read_csv(url)
 
-# Asegurarnos de que no haya NaN
-netflix['genres'] = netflix['genres'].fillna('')
+# Para evitar problemas a la hora de tratar los datos rellenamos los valores nulos
+# de las columnas con las que vamos a trabajar
+netflix['genres'] = netflix['genres'].fillna('[]')
+netflix['type'] = netflix['type'].fillna('')
 
-# Separar géneros múltiples y normalizar
-generos = netflix['genres'].str.split(',').explode().str.strip()
+# Creamos una ArrayList para almacenar una lista de los géneros
+# de cada una de las filas del DataSet
+lista_generos = []
+# Con un blucle comenzamos a recorrer la columna 'genres' del DataSet
+# fila a fila
+for genero in netflix['genres']:
+    # Al existir en el DataSet valores que no son unicamente listas,
+    # ya que hay valores que son string, usamos ast.literal_eval para
+    # evaluar cada uno de los valores y convertirlos en listas.
+    try:
+        genero_parseado = ast.literal_eval(genero)   
+    except Exception:
+        lista_generos.append([])  
+        continue
+    # Comprobamos si la fila actual es un string, en ese caso
+    # lo convertimos en una lista.
+    if isinstance(genero_parseado, str):
+        lista_generos.append([genero_parseado.strip()])
+    # Y en caso de no ser un string.
+    else:
+        lista_generos.append([g.strip() for g in genero_parseado if str(g).strip() != ""])
 
-# Contar los géneros más frecuentes
-top_generos = generos.value_counts().head(10)
-print("Géneros más comunes en el catálogo:")
-print(top_generos)
+# Asignamos la nueva lista de generos a la columna 'genres' del DataSet
+netflix['genres'] = lista_generos
 
-# Analizar en qué tipo de producción predominan
-generos_tipo = netflix.copy()
-generos_tipo['genre_individual'] = netflix['genres'].str.split(',').apply(lambda x: [g.strip() for g in x])
-generos_tipo = generos_tipo.explode('genre_individual')
+# De cada fila del DataSet separamos los generos en filas independientes
+# para poder contar las veces que aparece cada uno de los géneros
+# esto lo podemos hacer gracias al conventir la columna 'genres' en una lista
+generos_mas_comunes = (netflix.explode('genres'))['genres'].value_counts()
 
-# Contar por género y tipo
-conteo_genero_tipo = generos_tipo.groupby(['genre_individual','type']).size().unstack(fill_value=0)
-print(conteo_genero_tipo.sort_values(by='MOVIE', ascending=False).head(10))
+print("-- Top 10 géneros más comunes: --")
+print(generos_mas_comunes.head(10))
+
+# Lo primero que hacemos es volver a separar los géneros en filas independientes
+# para poder contar las veces que aparece cada uno de los géneros, y agrupamos
+# los resultados por géneros y tipo de producción. Con la funcion size() contamos
+# cuantas filas hay de cada grupo formado.
+producciones_por_genero = netflix.explode('genres').groupby(['genres', 'type']).size()                               
+
+# Muestro 20 filas porque el resultado viene en un formato que aparce en dos filas 
+# drama     MOVIE    1864
+#           SHOW     1037
+print("-- Producciones por género y tipo: --")
+print(producciones_por_genero.head(20))
