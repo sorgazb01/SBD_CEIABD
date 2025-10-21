@@ -28,9 +28,9 @@ for genero in netflix['genres']:
     # lo convertimos en una lista.
     if isinstance(genero_parseado, str):
         lista_generos.append([genero_parseado.strip()])
-    # Y en caso de no ser un string.
+    # Y en caso de no ser un string. Lo añadimos directamente a la lista.
     else:
-        lista_generos.append([g.strip() for g in genero_parseado if str(g).strip() != ""])
+        lista_generos.append(genero_parseado)
 
 # Asignamos la nueva lista de generos a la columna 'genres' del DataSet
 netflix['genres'] = lista_generos

@@ -15,9 +15,6 @@ netflix['release_year'] = pd.to_numeric(netflix['release_year'], errors='coerce'
 # Filtrar títulos que contengan 'Horror' o 'Terror' (insensible a mayúsculas)
 producciones_terror = netflix[netflix['genres'].str.contains(patron_genero, case=False, regex=True)]
 
-# Mostrar algunos resultados
-print(producciones_terror.sort_values('release_year', ascending=False).head(10))
-
 # Encontrar la producción más reciente
 produccion_terror_reciente = producciones_terror.sort_values('release_year', ascending=False).head(1)
 
