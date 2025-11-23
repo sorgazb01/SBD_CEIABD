@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    container_name: fastapi-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    networks:
+      - fastapi-mongo-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb-server
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - fastapi-mongo-network
+      
+networks:
+  fastapi-mongo-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
