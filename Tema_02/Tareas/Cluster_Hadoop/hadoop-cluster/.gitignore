@@ -1,2 +1,7 @@
+# Carpeta current
+current/
+
+# Archivos lock
 *.lock
-/current/
+
+

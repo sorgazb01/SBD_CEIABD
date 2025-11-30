@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  namenode:
+    image: apache/hadoop:3.4.1
+    container_name: namenode
+    hostname: namenode
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./namenode:/opt/hadoop/data/nameNode
+      - ./config:/opt/hadoop/etc/hadoop
+      - ./start-hdfs.sh:/start-hdfs.sh
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+      - "8088:8088"
+      - "19888:19888"
+    command: ["/bin/bash", "/start-hdfs.sh"]
+    networks:
+      - hdfs_network
+
+  datanode1:
+    image: apache/hadoop:3.4.1
+    container_name: datanode1
+    hostname: datanode1
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./datanode1:/opt/hadoop/data/dataNode
+      - ./config:/opt/hadoop/etc/hadoop
+      - ./init-datanode.sh:/init-datanode.sh
+    command: ["/bin/bash", "/init-datanode.sh"]
+    depends_on:
+      - namenode
+    networks:
+      - hdfs_network
+
+  datanode2:
+    image: apache/hadoop:3.4.1
+    container_name: datanode2
+    hostname: datanode2
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./datanode2:/opt/hadoop/data/dataNode
+      - ./config:/opt/hadoop/etc/hadoop
+      - ./init-datanode.sh:/init-datanode.sh
+    command: ["/bin/bash", "/init-datanode.sh"]
+    depends_on:
+      - namenode
+    networks:
+      - hdfs_network
+
+networks:
+  hdfs_network:
+    driver: bridge
