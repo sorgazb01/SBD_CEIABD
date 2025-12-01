@@ -1,0 +1,36 @@
+[
+  {
+    "_id": "1",
+    "nombre": "Laura",
+    "apellido": "Gómez",
+    "edad": 28,
+    "departamento": "Desarrollo",
+    "correo": "laura.gomez@technova.com",
+    "direccion": {
+      "calle": "Alcalá 128",
+      "ciudad": "Madrid"
+    },
+    "proyectos": [
+      "Sistema de recomendación 2022",
+      "Chatbot corporativo 2023",
+      "Optimización logística 2024"
+    ]
+  },
+  {
+    "_id": "2",
+    "nombre": "Carlos",
+    "apellido": "Ruiz",
+    "edad": 35,
+    "departamento": "Marketing",
+    "correo": "carlos.ruiz@technova.com",
+    "direccion": {
+      "calle": "Avenida Diagonal 250",
+      "ciudad": "Barcelona"
+    },
+    "proyectos": [
+      "Campaña internacional 2021",
+      "Lanzamiento de marca 2023"
+    ]
+  }
+]
+

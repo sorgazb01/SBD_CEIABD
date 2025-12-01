@@ -1,0 +1,52 @@
+[
+  {
+    "_id": "1",
+    "nombre": "Sistema de recomendación 2022",
+    "año": 2022,
+    "tipo": "Desarrollo",
+    "cliente": "DataPlus",
+    "empleados_asignados": [
+      "Laura Gómez"
+    ]
+  },
+  {
+    "_id": "2",
+    "nombre": "Chatbot corporativo 2023",
+    "año": 2023,
+    "tipo": "Desarrollo",
+    "cliente": "GreenHome",
+    "empleados_asignados": [
+      "Laura Gómez"
+    ]
+  },
+  {
+    "_id": "3",
+    "nombre": "Optimización logística 2024",
+    "año": 2024,
+    "tipo": "Desarrollo",
+    "cliente": null,
+    "empleados_asignados": [
+      "Laura Gómez"
+    ]
+  },
+  {
+    "_id": "4",
+    "nombre": "Campaña internacional 2021",
+    "año": 2021,
+    "tipo": "Marketing",
+    "cliente": null,
+    "empleados_asignados": [
+      "Carlos Ruiz"
+    ]
+  },
+  {
+    "_id": "5",
+    "nombre": "Lanzamiento de marca 2023",
+    "año": 2023,
+    "tipo": "Marketing",
+    "cliente": "GreenHome",
+    "empleados_asignados": [
+      "Carlos Ruiz"
+    ]
+  }
+]

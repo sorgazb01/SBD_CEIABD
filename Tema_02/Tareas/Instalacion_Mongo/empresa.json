@@ -1,0 +1,28 @@
+{
+    "_id": "1",
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "edad": 30,
+    "direccion": {
+        "calle": "Calle Principal",
+        "ciudad": "Ciudad de Mexico",
+        "pais": "Mexico"
+    },
+    "intereses": [
+        "deportes",
+        "musica",
+        "viajes"
+    ],
+    "trabajos": [
+        {
+            "empresa": "ABC Inc.",
+            "puesto": "Desarrollador",
+            "tiempo": 2
+        },
+        {
+            "empresa": "XYZ Corp.",
+            "puesto": "Analista",
+            "tiempo": 3
+        }
+    ]
+}

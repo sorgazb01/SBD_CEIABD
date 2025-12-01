@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "1",
+    "nombre_empresa": "DataPlus",
+    "sector": "Análisis financiero",
+    "contacto_principal": {
+      "nombre": "Marta Salinas",
+      "email": "marta@dataplus.com"
+    },
+    "proyectos_encargados": [
+      "Sistema de recomendación 2022"
+    ]
+  },
+  {
+    "_id": "2",
+    "nombre_empresa": "GreenHome",
+    "sector": "Energías renovables",
+    "contacto_principal": {
+      "nombre": "Pedro Lara",
+      "email": "pedro@greenhome.com"
+    },
+    "proyectos_encargados": [
+      "Chatbot corporativo 2023",
+      "Lanzamiento de marca 2023"
+    ]
+  }
+]
