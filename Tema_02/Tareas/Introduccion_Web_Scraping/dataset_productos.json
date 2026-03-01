@@ -1,0 +1,23 @@
+[
+  {
+    "nombre": "Router",
+    "precio": 59.9,
+    "stock": 10,
+    "sin_stock": false,
+    "valor_stock": 599.0
+  },
+  {
+    "nombre": "Switch",
+    "precio": 39.5,
+    "stock": 0,
+    "sin_stock": true,
+    "valor_stock": 0.0
+  },
+  {
+    "nombre": "Cable CAT6",
+    "precio": 0.45,
+    "stock": 120,
+    "sin_stock": false,
+    "valor_stock": 54.0
+  }
+]
