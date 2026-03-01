@@ -1,0 +1,5 @@
+nombre,precio,stock,sin_stock,valor_stock
+Router,59.9,15,False,898.5
+Switch,39.5,0,True,0.0
+Cable CAT6,0.45,120,False,54.0
+Hub,25.0,0,True,0.0
