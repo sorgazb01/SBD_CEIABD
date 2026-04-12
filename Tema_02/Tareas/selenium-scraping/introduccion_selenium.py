@@ -254,7 +254,8 @@ def iniciar_navegador():
     options.add_argument("--log-level=3")
 
     # Indicamos que el chromedriver.exe está en la misma carpeta que el script
-    servicio = Service(executable_path="chromedriver.exe")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    servicio = Service(executable_path=os.path.join(script_dir, "chromedriver.exe"))
 
     # Crear y devolver el navegador con esas opciones
     driver = webdriver.Chrome(service=servicio, options=options)
@@ -479,7 +480,17 @@ librosChildrens = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
 numeroLibrosChildrens = len(librosChildrens)
 print(f'Hay {numeroLibrosChildrens} libros de Childrens.')
 
+precioTotal = 0
+for libro in librosChildrens:
+    precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
+    precioLibro = precioLibro.replace('£', '')
+    precioLibro = float(precioLibro)
+    precioTotal += precioLibro
 
+precioMedio = round((precioTotal / numeroLibrosChildrens) ,2)
+print(f'El precio medio de los libros de Childrens es: £{precioMedio}')
+
+driver.back()
 
 print('-----------------------------------------------------')
 
@@ -493,6 +504,32 @@ print('-----------------------------------------------------')
 # - cuánto cuesta
 # - en qué página estaba
 # ==========================================================
+
+print('-- EJERCICIO 8 --')
+
+tituloLibroMasCaro = ''
+precioLibroMasCaro = 0
+numeroPaginas = 3
+
+for pagina in range(1, numeroPaginas + 1):
+    librosPagina = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
+    for libro in librosPagina:
+        tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
+        precioLibro = precioLibro.replace('£', '')
+        precioLibro = float(precioLibro)
+        if precioLibro > precioLibroMasCaro:
+            tituloLibroMasCaro = tituloLibro
+            precioLibroMasCaro = precioLibro
+            paginaLibroMasCaro = pagina
+    if pagina < numeroPaginas:
+        driver.find_element(By.CSS_SELECTOR, 'li.next a').click()
+
+print(f'El libro más caro es: {tituloLibroMasCaro}')
+print(f'Cuesta: £{precioLibroMasCaro}')
+print(f'Estaba en la página: {paginaLibroMasCaro}')
+
+print('-----------------------------------------------------')
 
 
 # ==========================================================
@@ -511,6 +548,65 @@ print('-----------------------------------------------------')
 # - cuál de los dos tiene mejor valoración
 # ==========================================================
 
+print('-- EJERCICIO 9 --')
+
+estrellasTextoANumero = {"One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5}
+
+tituloLibroMasCaro = ''
+precioLibroMasCaro = 0
+estrellasLibroMasCaro = 0
+
+tituloLibroMasBarato = ''
+precioLibroMasBarato = float('inf')
+estrellasLibroMasBarato = 0
+
+numeroPaginas = 7
+
+driver.get("https://books.toscrape.com/")
+
+for pagina in range(1, numeroPaginas + 1):
+    librosPagina = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
+    for libro in librosPagina:
+        tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
+        precioLibro = float(precioLibro.replace('£', ''))
+
+        claseEstrellas = libro.find_element(By.CSS_SELECTOR, 'p.star-rating').get_attribute('class')
+        palabraEstrellas = claseEstrellas.split()[1]
+        estrellasLibro = estrellasTextoANumero.get(palabraEstrellas, 0)
+        
+        if precioLibro > precioLibroMasCaro:
+            tituloLibroMasCaro = tituloLibro
+            precioLibroMasCaro = precioLibro
+            estrellasLibroMasCaro = estrellasLibro
+            
+        if precioLibro < precioLibroMasBarato:
+            tituloLibroMasBarato = tituloLibro
+            precioLibroMasBarato = precioLibro
+            estrellasLibroMasBarato = estrellasLibro
+            
+    if pagina < numeroPaginas:
+        driver.find_element(By.CSS_SELECTOR, 'li.next a').click()
+
+print(f'El libro más caro es: {tituloLibroMasCaro}')
+print(f'Cuesta: £{precioLibroMasCaro}')
+print(f'Estrellas: {estrellasLibroMasCaro}')
+
+
+print(f'El libro más barato es: {tituloLibroMasBarato}')
+print(f'Cuesta: £{precioLibroMasBarato}')
+print(f'Estrellas: {estrellasLibroMasBarato}')
+
+
+if estrellasLibroMasCaro > estrellasLibroMasBarato:
+    print(f'Mejor valorado: {tituloLibroMasCaro} (el más caro)')
+elif estrellasLibroMasBarato > estrellasLibroMasCaro:
+    print(f'Mejor valorado: {tituloLibroMasBarato} (el más barato)')
+else:
+    print('Ambos tienen la misma valoración')
+
+
+print('-----------------------------------------------------')
 
 # ==========================================================
 # EJERCICIO 10
@@ -536,6 +632,98 @@ print('-----------------------------------------------------')
 # ==========================================================
 
 
+print('-- EJERCICIO 10 --')
+
+
+driver.get("https://books.toscrape.com/")
+
+
+# Entramos en Humor
+categorias = driver.find_elements(By.CSS_SELECTOR, "div.side_categories ul li ul li a")
+for categoria in categorias:
+    if categoria.text.strip() == "Humor":
+        categoria.click()
+        break
+
+
+# Recogemos todos los libros de Humor (con paginación)
+datosLibrosHumor = []
+while True:
+    librosHumor = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
+    for libro in librosHumor:
+        tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        precioLibro = float(libro.find_element(By.CSS_SELECTOR, 'p.price_color').text.replace('£', ''))
+        datosLibrosHumor.append((tituloLibro, precioLibro))
+    siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
+    if siguientes:
+        siguientes[0].click()
+    else:
+        break
+
+# Volvemos a la portada y entramos en Mystery
+driver.get("https://books.toscrape.com/")
+categorias = driver.find_elements(By.CSS_SELECTOR, "div.side_categories ul li ul li a")
+for categoria in categorias:
+    if categoria.text.strip() == "Mystery":
+        categoria.click()
+        break
+
+
+# Recogemos todos los libros de Mystery (con paginación)
+datosLibrosMystery = []
+while True:
+    librosMystery = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
+    for libro in librosMystery:
+        tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        precioLibro = float(libro.find_element(By.CSS_SELECTOR, 'p.price_color').text.replace('£', ''))
+        datosLibrosMystery.append((tituloLibro, precioLibro))
+    siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
+    if siguientes:
+        siguientes[0].click()
+    else:
+        break
+
+
+# Comparaciones
+print(f'Número de libros en Humor: {len(datosLibrosHumor)}')
+print(f'Número de libros en Mystery: {len(datosLibrosMystery)}')
+
+
+libroMasCaroHumor = max(datosLibrosHumor, key=lambda x: x[1])
+libroMasCaroMystery = max(datosLibrosMystery, key=lambda x: x[1])
+
+
+print(f'Libro más caro de Humor: {libroMasCaroHumor[0]} (£{libroMasCaroHumor[1]})')
+print(f'Libro más caro de Mystery: {libroMasCaroMystery[0]} (£{libroMasCaroMystery[1]})')
+
+
+if libroMasCaroHumor[1] > libroMasCaroMystery[1]:
+    print('Humor tiene el libro más caro')
+elif libroMasCaroMystery[1] > libroMasCaroHumor[1]:
+    print('Mystery tiene el libro más caro')
+else:
+    print('Ambas categorías tienen el mismo precio máximo')
+
+
+precioMedioHumor = round(sum(p for _, p in datosLibrosHumor) / len(datosLibrosHumor), 2)
+precioMedioMystery = round(sum(p for _, p in datosLibrosMystery) / len(datosLibrosMystery), 2)
+
+
+print(f'Precio medio de Humor: £{precioMedioHumor}')
+print(f'Precio medio de Mystery: £{precioMedioMystery}')
+
+
+if precioMedioHumor > precioMedioMystery:
+    print('Humor tiene el precio medio más alto')
+elif precioMedioMystery > precioMedioHumor:
+    print('Mystery tiene el precio medio más alto')
+else:
+    print('Ambas categorías tienen el mismo precio medio')
+
+
+print('-----------------------------------------------------')
+
+
 # ==========================================================
 # EJERCICIO 11
 # CONTAR CUÁNTOS LIBROS HAY EN CADA CATEGORÍA
@@ -554,6 +742,45 @@ print('-----------------------------------------------------')
 # de todas sus páginas, no solo los de la primera.
 # ==========================================================
 
+print('-- EJERCICIO 11 --')
+
+
+driver.get("https://books.toscrape.com/")
+
+
+# Obtenemos los nombres y enlaces de todas las categorías
+categorias = driver.find_elements(By.CSS_SELECTOR, "div.side_categories ul li ul li a")
+nombresCategorias = []
+enlacesCategorias = []
+for categoria in categorias:
+    nombresCategorias.append(categoria.text.strip())
+    enlacesCategorias.append(categoria.get_attribute('href'))
+
+
+datosCategorias = []
+
+
+for i in range(len(nombresCategorias)):
+    driver.get(enlacesCategorias[i])
+    totalLibros = 0
+    while True:
+        libros = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
+        totalLibros += len(libros)
+        siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
+        if siguientes:
+            siguientes[0].click()
+        else:
+            break
+    datosCategorias.append((nombresCategorias[i], totalLibros))
+    print(f'{nombresCategorias[i]}: {totalLibros} libros')
+
+
+categoriaMasLibros = max(datosCategorias, key=lambda x: x[1])
+print(f'La categoría con más libros es: {categoriaMasLibros[0]} ({categoriaMasLibros[1]} libros)')
+
+
+print('-----------------------------------------------------')
+
 
 # ==========================================================
 # EJERCICIO 12
@@ -571,6 +798,59 @@ print('-----------------------------------------------------')
 # Muestra el ranking resultante.
 # ==========================================================
 
+print('-- EJERCICIO 12 --')
+
+# Volvemos a la pagina de inicio
+driver.get("https://books.toscrape.com/")
+
+# Diccionario que contiene el valor de cada numero de estrellas
+diccionarioEstrellas = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
+
+# Lista para guardar todos los libros
+totalLibros = []
+
+# Bucle para recorrer todas las paginas de la web para guardar todos sus libros
+while True:
+    # Obtenemos la lista de libros
+    libros = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
+    for libro in libros:
+        # Obtenemos el titulo del libro actual
+        tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        # Obtenemos el precio del libro actual, lo convertimos a float para poder comparar
+        precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
+        precioLibro = precioLibro.replace('£', '')
+        precioLibro = float(precioLibro)
+        # Obtenemos la clase del elemento que contiene las estrellas
+        estrellas = libro.find_element(By.CSS_SELECTOR, 'p.star-rating').get_attribute('class')
+        # Obtenemos el numero de estrellas a partir de la clase que indica el numero de estrellas
+        numeroEstrellas = estrellas.split()[1]
+        # Asignamos el numero de estrellas correspondiente por el diccionario
+        estrellasLibro = diccionarioEstrellas.get(numeroEstrellas, 0)
+        totalLibros.append((tituloLibro, precioLibro, estrellasLibro))
+    # Comprobamos si hay mas paginas y avanzamos
+    siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
+    if siguientes:
+        siguientes[0].click()
+    else:
+        break
+
+# Creamos una lista con los libros que tengan 5 estrellas
+libros5Estrellas = []
+
+for libro in totalLibros:
+    # Comprobamos que el libro actual tenga 5 estrellas
+    if libro[2] == 5:
+        libros5Estrellas.append(libro)
+# Ordenamos la lista de libros por precio de mayor a menor
+libros5Estrellas.sort(key=lambda x: x[1], reverse=True)
+
+# Mostramos los resultados
+print(f'Libros con 5 estrellas: {len(libros5Estrellas)}')
+print('Ranking de mayor a menor precio:')
+for indice, (titulo, precio, estrellas) in enumerate(libros5Estrellas, 1):
+    print(f'{indice}. {titulo} - £{precio}')
+
+print('-----------------------------------------------------')
 
 # ==========================================================
 # EJERCICIO 13
@@ -591,8 +871,58 @@ print('-----------------------------------------------------')
 # Después muestra todos sus datos.
 # ==========================================================
 
+print('-- EJERCICIO 13 --')
 
+# Volvemos a la pagina de inicio
+driver.get("https://books.toscrape.com/")
 
+# Diccionario que contiene el valor de cada numero de estrellas
+diccionarioEstrellas = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
 
+# Libro que cumpla las 3 condiciones
+mejorLibro = None
+
+# Bucle para recorrer todos los libros en busca del libro que cumpla las 3 condiciones
+while not mejorLibro:
+    libros = driver.find_elements(By.CSS_SELECTOR, 'article.product_pod')
+    # Recorremos la lista de libros de la pagina
+    for libro in libros:
+        # Obtenemos el titulo del libro actual
+        tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        # Obtenemos el precio del libro actual, lo convertimos a float para poder comparar
+        precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
+        precioLibro = precioLibro.replace('£', '')
+        precioLibro = float(precioLibro)
+        # Obtenemos la clase del elemento que contiene las estrellas
+        estrellas = libro.find_element(By.CSS_SELECTOR, 'p.star-rating').get_attribute('class')
+        # Obtenemos el numero de estrellas a partir de la clase que indica el numero de estrellas
+        numeroEstrellas = estrellas.split()[1]
+        # Asignamos el numero de estrellas correspondiente por el diccionario
+        estrellasLibro = diccionarioEstrellas.get(numeroEstrellas, 0)
+        # Obtenemos la disponibilidad del libro actual
+        disponibilidad = libro.find_element(By.CSS_SELECTOR, 'p.instock.availability').text.strip()
+        # Comprobamos si el libro cumple las 3 condiciones, en el caso de cumplirlas lo guardamos y salimos del bucle
+        if precioLibro < 20 and estrellasLibro == 5 and 'In stock' in disponibilidad:
+            mejorLibro = (tituloLibro, precioLibro, estrellasLibro, disponibilidad)
+            break
+    # Si la lista de libros no contiene el ningun libro que cumpla las 3 condicones
+    # avanzamos a la siguiente pagina
+    if not mejorLibro:
+        siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
+        if siguientes:
+            siguientes[0].click()
+        else:
+            break
+
+# En el caso de encontrar un libro que cumpla las 3 condiciones lo mostramos
+if mejorLibro:
+    print(f'Título: {mejorLibro[0]}')
+    print(f'Precio: £{mejorLibro[1]}')
+    print(f'Estrellas: {mejorLibro[2]}')
+    print(f'Disponibilidad: {mejorLibro[3]}')
+else:
+    print('No se ha encontrado ningún libro que cumpla las condiciones')
+
+print('-----------------------------------------------------')
 
 driver.quit()
