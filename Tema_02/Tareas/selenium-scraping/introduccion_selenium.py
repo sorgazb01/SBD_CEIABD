@@ -648,16 +648,12 @@ print('-- EJERCICIO 10 --')
 
 driver.get("https://books.toscrape.com/")
 
-
-# Entramos en Humor
 categorias = driver.find_elements(By.CSS_SELECTOR, "div.side_categories ul li ul li a")
 for categoria in categorias:
     if categoria.text.strip() == "Humor":
         categoria.click()
         break
 
-
-# Recogemos todos los libros de Humor (con paginación)
 datosLibrosHumor = []
 while True:
     librosHumor = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
@@ -673,7 +669,6 @@ while True:
     else:
         break
 
-# Volvemos a la portada y entramos en Mystery
 driver.get("https://books.toscrape.com/")
 categorias = driver.find_elements(By.CSS_SELECTOR, "div.side_categories ul li ul li a")
 for categoria in categorias:
@@ -681,8 +676,6 @@ for categoria in categorias:
         categoria.click()
         break
 
-
-# Recogemos todos los libros de Mystery (con paginación)
 datosLibrosMystery = []
 while True:
     librosMystery = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
@@ -698,19 +691,14 @@ while True:
     else:
         break
 
-
-# Comparaciones
 print(f'Número de libros en Humor: {len(datosLibrosHumor)}')
 print(f'Número de libros en Mystery: {len(datosLibrosMystery)}')
-
 
 libroMasCaroHumor = max(datosLibrosHumor, key=lambda x: x[1])
 libroMasCaroMystery = max(datosLibrosMystery, key=lambda x: x[1])
 
-
 print(f'Libro más caro de Humor: {libroMasCaroHumor[0]} (£{libroMasCaroHumor[1]})')
 print(f'Libro más caro de Mystery: {libroMasCaroMystery[0]} (£{libroMasCaroMystery[1]})')
-
 
 if libroMasCaroHumor[1] > libroMasCaroMystery[1]:
     print('Humor tiene el libro más caro')
@@ -719,14 +707,11 @@ elif libroMasCaroMystery[1] > libroMasCaroHumor[1]:
 else:
     print('Ambas categorías tienen el mismo precio máximo')
 
-
 precioMedioHumor = round(sum(p for _, p in datosLibrosHumor) / len(datosLibrosHumor), 2)
 precioMedioMystery = round(sum(p for _, p in datosLibrosMystery) / len(datosLibrosMystery), 2)
 
-
 print(f'Precio medio de Humor: £{precioMedioHumor}')
 print(f'Precio medio de Mystery: £{precioMedioMystery}')
-
 
 if precioMedioHumor > precioMedioMystery:
     print('Humor tiene el precio medio más alto')
@@ -763,7 +748,6 @@ print('-- EJERCICIO 11 --')
 driver.get("https://books.toscrape.com/")
 
 
-# Obtenemos los nombres y enlaces de todas las categorías
 categorias = driver.find_elements(By.CSS_SELECTOR, "div.side_categories ul li ul li a")
 nombresCategorias = []
 enlacesCategorias = []
