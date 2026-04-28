@@ -280,6 +280,7 @@ driver.get("https://books.toscrape.com/")
 
 categoriasLibros = driver.find_elements(By.CSS_SELECTOR, 'div.side_categories ul li ul li a')
 
+print('-- EJERCICIO 1 --')
 print('Categorías: ')
 print('---------------------------')
 for categoria in categoriasLibros:
@@ -399,8 +400,8 @@ tituloLibroMas50Libras = primerLibroMas50Libras.find_element(By.CSS_SELECTOR, 'h
 precioLibroMas50Libras = primerLibroMas50Libras.find_element(By.CSS_SELECTOR, 'p.price_color').text
 # Obtenemos la disponibilidad
 disponibilidadLibroMas50Libras = primerLibroMas50Libras.find_element(By.CSS_SELECTOR, 'p.instock.availability').text
-# Accedemos a la pagina del libro
-primerLibroMas50Libras.find_element(By.CSS_SELECTOR, 'article.product_pod h3 a').click()
+# Accedemos a la pagina del libro (el selector es relativo al propio article, por eso usamos 'h3 a')
+primerLibroMas50Libras.find_element(By.CSS_SELECTOR, 'h3 a').click()
 # Obtenemos la categoria
 categoriaLibro = driver.find_element(By.CSS_SELECTOR, 'ul.breadcrumb li:nth-child(3)').text
 print(f'Título: {tituloLibroMas50Libras}')
@@ -482,9 +483,11 @@ print(f'Hay {numeroLibrosChildrens} libros de Childrens.')
 
 precioTotal = 0
 for libro in librosChildrens:
+    # Obtenemos el precio de cada libro y lo convertimos a float
     precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
     precioLibro = precioLibro.replace('£', '')
     precioLibro = float(precioLibro)
+    # Acumulamos el precio para calcular la media después
     precioTotal += precioLibro
 
 precioMedio = round((precioTotal / numeroLibrosChildrens) ,2)
@@ -512,16 +515,21 @@ precioLibroMasCaro = 0
 numeroPaginas = 3
 
 for pagina in range(1, numeroPaginas + 1):
+    # Obtenemos los libros de la página actual
     librosPagina = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
     for libro in librosPagina:
+        # Obtenemos el titulo y el precio de cada libro
         tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
         precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
+        # Quitamos la moneda y convertimos a float para poder comparar
         precioLibro = precioLibro.replace('£', '')
         precioLibro = float(precioLibro)
+        # Si el precio actual supera al máximo, actualizamos y guardamos la página
         if precioLibro > precioLibroMasCaro:
             tituloLibroMasCaro = tituloLibro
             precioLibroMasCaro = precioLibro
             paginaLibroMasCaro = pagina
+    # Si no hemos llegado a la última página, avanzamos a la siguiente
     if pagina < numeroPaginas:
         driver.find_element(By.CSS_SELECTOR, 'li.next a').click()
 
@@ -565,26 +573,29 @@ numeroPaginas = 7
 driver.get("https://books.toscrape.com/")
 
 for pagina in range(1, numeroPaginas + 1):
+    # Obtenemos los libros de la página actual
     librosPagina = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
     for libro in librosPagina:
+        # Obtenemos el titulo del libro
         tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
+        # Obtenemos el precio y lo convertimos a float para poder comparar
         precioLibro = libro.find_element(By.CSS_SELECTOR, 'p.price_color').text
         precioLibro = float(precioLibro.replace('£', ''))
-
+        # Obtenemos la clase CSS del elemento de estrellas y extraemos el número de estrellas
         claseEstrellas = libro.find_element(By.CSS_SELECTOR, 'p.star-rating').get_attribute('class')
         palabraEstrellas = claseEstrellas.split()[1]
         estrellasLibro = estrellasTextoANumero.get(palabraEstrellas, 0)
-        
+        # Actualizamos el libro más caro si el precio actual es mayor
         if precioLibro > precioLibroMasCaro:
             tituloLibroMasCaro = tituloLibro
             precioLibroMasCaro = precioLibro
             estrellasLibroMasCaro = estrellasLibro
-            
+        # Actualizamos el libro más barato si el precio actual es menor
         if precioLibro < precioLibroMasBarato:
             tituloLibroMasBarato = tituloLibro
             precioLibroMasBarato = precioLibro
             estrellasLibroMasBarato = estrellasLibro
-            
+    # Si no hemos llegado a la última página, avanzamos a la siguiente
     if pagina < numeroPaginas:
         driver.find_element(By.CSS_SELECTOR, 'li.next a').click()
 
@@ -651,9 +662,11 @@ datosLibrosHumor = []
 while True:
     librosHumor = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
     for libro in librosHumor:
+        # Obtenemos el titulo y el precio de cada libro y los guardamos como tupla
         tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
         precioLibro = float(libro.find_element(By.CSS_SELECTOR, 'p.price_color').text.replace('£', ''))
         datosLibrosHumor.append((tituloLibro, precioLibro))
+    # Comprobamos si hay más páginas y avanzamos
     siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
     if siguientes:
         siguientes[0].click()
@@ -674,9 +687,11 @@ datosLibrosMystery = []
 while True:
     librosMystery = driver.find_elements(By.CSS_SELECTOR, "article.product_pod")
     for libro in librosMystery:
+        # Obtenemos el titulo y el precio de cada libro y los guardamos como tupla
         tituloLibro = libro.find_element(By.CSS_SELECTOR, 'h3 a').get_attribute('title')
         precioLibro = float(libro.find_element(By.CSS_SELECTOR, 'p.price_color').text.replace('£', ''))
         datosLibrosMystery.append((tituloLibro, precioLibro))
+    # Comprobamos si hay más páginas y avanzamos
     siguientes = driver.find_elements(By.CSS_SELECTOR, 'li.next a')
     if siguientes:
         siguientes[0].click()
